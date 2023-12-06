@@ -1,0 +1,232 @@
+<div fxLayout="row wrap" class="matero-row">
+  <div fxFlex="100" class="matero-col">
+    <button mat-raised-button class="m-r-8" color="primary" cdkFocusInitial (click)="save()">{{ 'common.save' |
+      translate
+      }}</button>
+    <button mat-raised-button class="m-r-8" color="primary" (click)="createProduct({})">Thêm sản phẩm</button>
+    <button mat-raised-button class="m-r-8" color="primary" (click)="createCustomer({})">Thêm khách</button>
+    <button mat-raised-button class="m-r-8" color="primary" (click)="chooseFiles.click()">Thêm ảnh</button>
+    <input hidden type="file" #chooseFiles id="chooseFiles" onclick="value = null" (change)="onChooseFiles($event)"
+      name="chooseFiles" multiple="multiple" accept="image/*" />
+    <button mat-raised-button class="m-r-8 button-close" (click)="onClose()">{{ 'common.close' | translate }}</button>
+  </div>
+</div>
+<div fxLayout="row wrap" class="matero-row">
+  <div fxFlex="100" class="matero-col">
+    <mat-card class="mat-card">
+      <!-- create-new -->
+      <mat-card-title *ngIf="!editMode">Tạo mới</mat-card-title>
+      <mat-card-title *ngIf="editMode">Chỉnh sửa</mat-card-title>
+      <mat-card-content>
+
+        <form [formGroup]="reactiveForm">
+          <div fxLayout="row" fxLayoutAlign="space-between">
+            <div fxLayout="column" fxFlex="0 0 47%">
+              <!-- code -->
+              <mat-form-field class="m-r-8" [style.max-width.px]="150">
+                <mat-label>{{ 'pages.order.edit.code' | translate }}</mat-label>
+                <input matInput placeholder="code" formControlName="code">
+                <mat-error *ngIf="reactiveForm.get('code')?.invalid">
+                  {{'validations.required' | translate}}
+                </mat-error>
+              </mat-form-field>
+            </div>
+            <div fxLayout="column" fxFlex="0 0 47%">
+              <!-- productId -->
+              <mat-form-field class="m-r-8">
+                <mat-label>Sản phẩm</mat-label>
+                <input matInput formControlName="productName" placeholder="Sản phẩm"
+                  [matAutocomplete]="autocompleteProductId" (ngModelChange)="productFilter()"
+                  (focusout)="productFocusOut()">
+                <mat-autocomplete #autocompleteProductId="matAutocomplete"
+                  (optionSelected)="setProductDto($event.option.value)">
+                  <mat-option *ngFor="let productDto of lstProductDtoFiltered" [value]="productDto">
+                    {{productDto.code}} - {{productDto.name}}
+                  </mat-option>
+                </mat-autocomplete>
+              </mat-form-field>
+            </div>
+          </div>
+          <div fxLayout="row" fxLayoutAlign="space-between">
+            <div fxLayout="column" fxFlex="0 0 47%">
+              <!-- price -->
+              <mat-form-field class="m-r-8" [style.max-width.px]="150">
+                <mat-label>{{ 'pages.order.edit.price' | translate }}</mat-label>
+                <input matInput placeholder="price" formControlName="price" required (focus)="onFocusNumber($event)"
+                  (blur)="onBlurNumber($event)">
+                <mat-error *ngIf="reactiveForm.get('price')?.invalid">
+                  {{'validations.required' | translate}}
+                </mat-error>
+              </mat-form-field>
+            </div>
+            <div fxLayout="column" fxFlex="0 0 47%">
+              <!-- depositAmount -->
+              <mat-form-field class="m-r-8" [style.max-width.px]="150">
+                <mat-label>Tiền đặt cọc</mat-label>
+                <input matInput placeholder="depositAmount" formControlName="depositAmount" required
+                  (focus)="onFocusNumber($event)" (blur)="onBlurNumber($event)">
+                <mat-error *ngIf="reactiveForm.get('depositAmount')?.invalid">
+                  {{'validations.required' | translate}}
+                </mat-error>
+              </mat-form-field>
+            </div>
+          </div>
+          <div fxLayout="row" fxLayoutAlign="space-between">
+            <div fxLayout="column" fxFlex="0 0 47%">
+              <!-- source -->
+              <mat-form-field class="m-r-8" [style.max-width.px]="150">
+                <mat-label>{{ 'pages.order.edit.source' | translate }}</mat-label>
+                <mat-select required formControlName="source">
+                  <mat-option *ngFor="let orderSource of lstOrderSourceDto" [value]="orderSource.value">
+                    {{ orderSource.name }}
+                  </mat-option>
+                </mat-select>
+                <mat-error *ngIf="reactiveForm.get('source')?.invalid">
+                  {{'validations.required' | translate}}
+                </mat-error>
+              </mat-form-field>
+            </div>
+            <div fxLayout="column" fxFlex="0 0 47%">
+              <!-- status -->
+              <mat-form-field class="m-r-8" [style.max-width.px]="150">
+                <mat-label>{{ 'pages.order.edit.status' | translate }}</mat-label>
+                <mat-select required formControlName="status">
+                  <mat-option *ngFor="let status of lstOrderStatusDto" [value]="status.value">
+                    {{ status.name }}
+                  </mat-option>
+                </mat-select>
+                <mat-error *ngIf="reactiveForm.get('status')?.invalid">
+                  {{'validations.required' | translate}}
+                </mat-error>
+              </mat-form-field>
+            </div>
+          </div>
+          <div fxLayout="row" fxLayoutAlign="space-between">
+            <div fxLayout="column" fxFlex="0 0 47%">
+              <!-- deliveryDateTime -->
+              <mat-form-field class="m-r-8" [style.max-width.px]="180">
+                <mat-label>{{ 'pages.order.edit.deliveryDateTime' | translate }}</mat-label>
+                <input matInput [ngxMatDatetimePicker]="deliveryDateTimePicker" formControlName="deliveryDateTime"
+                  [min]="minDate" [max]="maxDate">
+                <mat-datepicker-toggle matSuffix [for]="$any(deliveryDateTimePicker)">
+                </mat-datepicker-toggle>
+                <ngx-mat-datetime-picker #deliveryDateTimePicker [showSpinners]="true" [showSeconds]="true"
+                  [stepHour]="1" [stepMinute]="15" [stepSecond]="30" [touchUi]="true" [color]="'primary'"
+                  [enableMeridian]="false" [disableMinute]="false" [hideTime]="false">
+                </ngx-mat-datetime-picker>
+                <mat-error *ngIf="reactiveForm.get('deliveryDateTime')?.invalid">
+                  {{'validations.required' | translate}}
+                </mat-error>
+              </mat-form-field>
+            </div>
+            <div fxLayout="column" fxFlex="0 0 47%">
+              <!-- customerMessage -->
+              <mat-form-field class="m-r-8">
+                <mat-label>{{ 'pages.order.edit.customerMessage' | translate }}</mat-label>
+                <textarea matInput placeholder="customerMessage" formControlName="customerMessage"></textarea>
+              </mat-form-field>
+            </div>
+          </div>
+          <div fxLayout="row" fxLayoutAlign="space-between">
+            <div fxLayout="column" fxFlex="0 0 47%">
+              <!-- noteForShipper -->
+              <mat-form-field class="m-r-8">
+                <mat-label>{{ 'pages.order.edit.noteForShipper' | translate }}</mat-label>
+                <textarea matInput placeholder="noteForShipper" formControlName="noteForShipper"></textarea>
+              </mat-form-field>
+            </div>
+            <div fxLayout="column" fxFlex="0 0 47%">
+              <!-- noteForFlorist -->
+              <mat-form-field class="m-r-8">
+                <mat-label>{{ 'pages.order.edit.noteForFlorist' | translate }}</mat-label>
+                <textarea matInput placeholder="noteForFlorist" formControlName="noteForFlorist"></textarea>
+              </mat-form-field>
+            </div>
+          </div>
+          <div fxLayout="row" fxLayoutAlign="space-between">
+            <div fxLayout="column" fxFlex="0 0 47%">
+              <!-- buyerId -->
+              <mat-form-field class="m-r-8">
+                <mat-label>{{ 'pages.order.edit.buyerId' | translate }}</mat-label>
+                <input matInput required formControlName="buyerName"
+                  placeholder="{{ 'pages.order.edit.buyerId' | translate }}" [matAutocomplete]="autocompleteBuyerId"
+                  (ngModelChange)="buyerFilter()" (focusout)="buyerFocusOut()">
+                <mat-autocomplete #autocompleteBuyerId="matAutocomplete"
+                  (optionSelected)="setBuyerDto($event.option.value)">
+                  <mat-option *ngFor="let buyerDto of lstBuyerDtoFiltered" [value]="buyerDto">
+                    {{buyerDto.fullName}} - {{buyerDto.phoneNumber}}
+                  </mat-option>
+                </mat-autocomplete>
+                <mat-error *ngIf="reactiveForm.get('buyerId')?.invalid">
+                  {{'validations.required' | translate}}
+                </mat-error>
+              </mat-form-field>
+            </div>
+            <div fxLayout="column" fxFlex="0 0 47%">
+              <!-- receiverId -->
+              <mat-form-field class="m-r-8">
+                <mat-label>{{ 'pages.order.edit.receiverId' | translate }}</mat-label>
+                <input matInput required formControlName="receiverName"
+                  placeholder="{{ 'pages.order.edit.receiverId' | translate }}"
+                  [matAutocomplete]="autocompleteReceiverId" (ngModelChange)="receiverFilter()"
+                  (focusout)="receiverFocusOut()">
+                <mat-autocomplete #autocompleteReceiverId="matAutocomplete"
+                  (optionSelected)="setReceiverDto($event.option.value)">
+                  <mat-option *ngFor="let receiverDto of lstReceiverDtoFiltered" [value]="receiverDto">
+                    {{receiverDto.fullName}} - {{receiverDto.phoneNumber}}
+                  </mat-option>
+                </mat-autocomplete>
+                <mat-error *ngIf="reactiveForm.get('receiverId')?.invalid">
+                  {{'validations.required' | translate}}
+                </mat-error>
+              </mat-form-field>
+            </div>
+          </div>
+          <div fxLayout="row" fxLayoutAlign="space-between">
+            <div fxLayout="column" fxFlex="0 0 47%">
+              <!-- supportedSaleId -->
+              <mat-form-field class="m-r-8">
+                <mat-label>{{ 'pages.order.edit.supportedSaleId' | translate }}</mat-label>
+                <input matInput required formControlName="supportedSaleName"
+                  placeholder="{{ 'pages.order.edit.supportedSaleId' | translate }}"
+                  [matAutocomplete]="autocompleteSupportedSaleId" (ngModelChange)="supportedSaleFilter()"
+                  (focusout)="supportedSaleFocusOut()">
+                <mat-autocomplete #autocompleteSupportedSaleId="matAutocomplete"
+                  (optionSelected)="setSupportedSaleDto($event.option.value)">
+                  <mat-option *ngFor="let supportedSaleDto of lstSupportedSaleDtoFiltered" [value]="supportedSaleDto">
+                    {{supportedSaleDto.fullName}}
+                  </mat-option>
+                </mat-autocomplete>
+                <mat-error *ngIf="reactiveForm.get('supportedSaleId')?.invalid">
+                  {{'validations.required' | translate}}
+                </mat-error>
+              </mat-form-field>
+            </div>
+            <div fxLayout="column" fxFlex="0 0 47%">
+            </div>
+          </div>
+          <div fxLayout="row" fxLayoutAlign="space-between">
+            <div fxLayout="column" fxFlex="0 0 100%">
+              <!-- images -->
+              <mat-grid-list cols="4" rowHeight="1:1">
+                <mat-grid-tile *ngFor="let attachment of attachments; let i = index;">
+                  <mat-grid-tile-header>
+                    <span matLine>{{ i + 1 }} - {{ attachment.name }}</span>
+                    <span matLine>({{ attachment.uploadedBy?.fullName }})</span>
+                    <button class="button-image-delete" color="warn" (click)="deleteImage(attachment)">
+                      <mat-icon class="material-icons">delete</mat-icon>
+                    </button>
+                  </mat-grid-tile-header>
+
+                  <img class="w-full h-full object-cover cursor-pointer" [src]="attachment.url"
+                    alt="{{ i + 1 }} - {{ attachment.name }}" (click)="previewImage(i)" />
+                </mat-grid-tile>
+              </mat-grid-list>
+            </div>
+          </div>
+        </form>
+      </mat-card-content>
+
+    </mat-card>
+  </div>
+</div>

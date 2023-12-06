@@ -1,0 +1,52 @@
+{
+  "menu": [
+    {
+      "route": "account",
+      "name": "account",
+      "type": "link",
+      "icon": "account_box"
+    },
+    {
+      "route": "customer",
+      "name": "customer",
+      "type": "link",
+      "icon": "person"
+    },
+    {
+      "route": "product",
+      "name": "product",
+      "type": "link",
+      "icon": "list"
+    },
+    {
+      "route": "order",
+      "name": "order",
+      "type": "link",
+      "icon": "subject"
+    },
+    {
+      "route": "shipper-route",
+      "name": "shipper-route",
+      "type": "link",
+      "icon": "account_box"
+    },
+    {
+      "route": "report",
+      "name": "report",
+      "type": "sub",
+      "icon": "report",
+      "children": [
+        {
+          "route": "profits",
+          "name": "profits",
+          "type": "link"
+        },
+        {
+          "route": "shipper",
+          "name": "shipper",
+          "type": "link"
+        }
+      ]
+    }
+  ]
+}

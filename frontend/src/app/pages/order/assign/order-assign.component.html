@@ -1,0 +1,68 @@
+<div fxLayout="row wrap" class="matero-row">
+  <div fxFlex="100" class="matero-col">
+    <!-- Save -->
+    <button mat-raised-button class="m-r-8" color="primary" cdkFocusInitial (click)="save()">{{ 'common.save' |
+      translate
+      }}</button>
+    <!-- Close -->
+    <button mat-raised-button class="m-r-8 button-close" (click)="onClose()">{{ 'common.close' | translate }}</button>
+  </div>
+</div>
+<div fxLayout="row wrap" class="matero-row">
+  <div fxFlex="100" class="matero-col">
+    <mat-card class="mat-card">
+      <!-- Assign -->
+      <mat-card-title>Chuyển giao hóa đơn</mat-card-title>
+      <mat-card-content>
+
+        <form [formGroup]="reactiveForm">
+          <div fxLayout="row" fxLayoutAlign="space-between">
+            <div fxLayout="column" fxFlex="0 0 47%">
+              <!-- code -->
+              <mat-form-field class="m-r-8" [style.max-width.px]="150">
+                <mat-label>{{ 'pages.order.edit.code' | translate }}</mat-label>
+                <input matInput placeholder="code" formControlName="code">
+                <mat-error *ngIf="reactiveForm.get('code')?.invalid">
+                  {{'validations.required' | translate}}
+                </mat-error>
+              </mat-form-field>
+            </div>
+            <div fxLayout="column" fxFlex="0 0 47%">
+              <!-- supportedSaleId -->
+              <mat-form-field class="m-r-8">
+                <mat-label>{{ 'pages.order.edit.supportedSaleId' | translate }}</mat-label>
+                <input matInput required formControlName="supportedSaleName"
+                  placeholder="{{ 'pages.order.edit.supportedSaleId' | translate }}"
+                  [matAutocomplete]="autocompleteSupportedSaleId" (ngModelChange)="supportedSaleFilter()"
+                  (focusout)="supportedSaleFocusOut()">
+                <mat-autocomplete #autocompleteSupportedSaleId="matAutocomplete"
+                  (optionSelected)="setSupportedSaleDto($event.option.value)">
+                  <mat-option *ngFor="let supportedSaleDto of lstSupportedSaleDtoFiltered" [value]="supportedSaleDto">
+                    {{supportedSaleDto.fullName}}
+                  </mat-option>
+                </mat-autocomplete>
+                <mat-error *ngIf="reactiveForm.get('supportedSaleId')?.invalid">
+                  {{'validations.required' | translate}}
+                </mat-error>
+              </mat-form-field>
+            </div>
+          </div>
+        </form>
+      </mat-card-content>
+
+    </mat-card>
+
+    <mtx-grid [data]="list" [columns]="columns" [loading]="false" [cellTemplate]="{ 'amount': amountTpl }"
+      [columnResizable]="columnResizable" [multiSelectable]="multiSelectable" [rowSelectable]="rowSelectable"
+      [hideRowSelectionCheckbox]="hideRowSelectionCheckbox" [rowHover]="rowHover" [rowStriped]="rowStriped"
+      [columnHideable]="columnHideable" [expandable]="expandable" [pageOnFront]="pageOnFront"
+      [showPaginator]="showPaginator" [pageSizeOptions]="pageSizeOptions" [pageIndex]="query.page"
+      [pageSize]="query.size" [length]="total" (page)="pageChanged($event)" (sortChange)="changeSort($event)"
+      (selectionChange)="changeSelect($event)">
+    </mtx-grid>
+
+    <ng-template #amountTpl let-row let-index="index" let-col="colDef">
+      {{row.amount | number:'1.0-3':'currentLocale'}}
+    </ng-template>
+  </div>
+</div>

@@ -1,0 +1,79 @@
+<div fxLayout="row wrap" class="matero-row">
+  <div fxFlex="100" class="matero-col">
+    <button mat-raised-button class="m-t-8" color="primary" cdkFocusInitial (click)="save()">{{ 'common.save' |
+      translate }}</button>
+    <button mat-raised-button class="m-t-8 button-close" (click)="onClose()">{{ 'common.close' | translate }}</button>
+  </div>
+</div>
+<div fxLayout="row wrap" class="matero-row">
+  <div fxFlex="100" class="matero-col">
+    <mat-card>
+      <mat-card-title *ngIf="!editMode">Tạo mới (Mật khẩu: 123456)</mat-card-title>
+      <mat-card-title *ngIf="editMode">Chỉnh sửa</mat-card-title>
+
+      <form [formGroup]="reactiveForm">
+        <div fxLayout="row" fxLayoutAlign="space-between">
+          <div fxLayout="column" fxFlex="0 0 47%">
+            <!-- username -->
+            <mat-form-field class="m-r-8">
+              <mat-label>{{ 'pages.account.edit.username' | translate }}</mat-label>
+              <textarea matInput placeholder="Tên đăng nhập" formControlName="username" required></textarea>
+              <mat-error *ngIf="reactiveForm.get('username')?.invalid">
+                {{'validations.required' | translate}}
+              </mat-error>
+            </mat-form-field>
+          </div>
+          <div fxLayout="column" fxFlex="0 0 47%">
+            <!-- roles -->
+            <mat-form-field class="m-r-8" [style.max-width.px]="150">
+              <mat-label>Vai trò</mat-label>
+              <mat-select required formControlName="roles" multiple>
+                <mat-option *ngFor="let role of lstRolesDto" [value]="role.value">
+                  {{ role.name }}
+                </mat-option>
+              </mat-select>
+              <mat-error *ngIf="reactiveForm.get('roles')?.invalid">
+                {{'validations.required' | translate}}
+              </mat-error>
+            </mat-form-field>
+          </div>
+        </div>
+        <div fxLayout="row" fxLayoutAlign="space-between">
+          <div fxLayout="column" fxFlex="0 0 47%">
+            <!-- fullName -->
+            <mat-form-field class="m-r-8">
+              <mat-label>{{ 'pages.account.edit.fullName' | translate }}</mat-label>
+              <input matInput placeholder="Họ tên" formControlName="fullName" required>
+              <mat-error *ngIf="reactiveForm.get('fullName')?.invalid">
+                {{'validations.required' | translate}}
+              </mat-error>
+            </mat-form-field>
+          </div>
+          <div fxLayout="column" fxFlex="0 0 47%">
+            <!-- phoneNumber -->
+            <mat-form-field class="m-r-8">
+              <mat-label>{{ 'pages.account.edit.phoneNumber' | translate }}</mat-label>
+              <input matInput placeholder="Số điện thoại" formControlName="phoneNumber" required>
+              <mat-error *ngIf="reactiveForm.get('phoneNumber')?.invalid">
+                {{'validations.required' | translate}}
+              </mat-error>
+            </mat-form-field>
+          </div>
+        </div>
+        <div *ngIf="editMode" fxLayout="row" fxLayoutAlign="space-between">
+          <div fxLayout="column" fxFlex="0 0 47%">
+            <!-- chooseFile -->
+            <button mat-raised-button class="m-r-8" color="primary" (click)="chooseFile.click()">Chọn ảnh avatar</button>
+            <input hidden type="file" #chooseFile id="chooseFile" onclick="value = null" (change)="onChooseFile($event)"
+              name="chooseFile" accept="image/*" />
+          </div>
+          <div fxLayout="column" fxFlex="0 0 47%">
+            <!-- phoneNumber -->
+            <img class="w-full h-full object-cover cursor-pointer" [src]="this.avatar"/>
+          </div>
+        </div>
+      </form>
+
+    </mat-card>
+  </div>
+</div>

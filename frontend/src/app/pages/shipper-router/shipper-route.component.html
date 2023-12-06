@@ -1,0 +1,73 @@
+
+<div class="page-header">
+  <form [formGroup]="searchForm">
+      <!-- from -->
+      <mat-form-field class="m-r-8" [style.max-width.px]="100">
+          <input required matInput [matDatepicker]="fromPicker" placeholder="Từ ngày" formControlName="fromDate" [min]="minDate"
+              [max]="maxDate">
+          <mat-datepicker-toggle matSuffix [for]="fromPicker"></mat-datepicker-toggle>
+          <mat-datepicker #fromPicker></mat-datepicker>
+          <mat-error *ngIf="searchForm.get('fromDate')?.invalid">
+              {{'validations.required' | translate}}
+          </mat-error>
+      </mat-form-field>
+      <!-- to -->
+      <mat-form-field class="m-r-8" [style.max-width.px]="100">
+          <input required matInput [matDatepicker]="toPicker" placeholder="Đến ngày" formControlName="toDate" [min]="minDate"
+              [max]="maxDate">
+          <mat-datepicker-toggle matSuffix [for]="toPicker"></mat-datepicker-toggle>
+          <mat-datepicker #toPicker></mat-datepicker>
+          <mat-error *ngIf="searchForm.get('toDate')?.invalid">
+              {{'validations.required' | translate}}
+          </mat-error>
+      </mat-form-field>
+
+      <button class="m-r-8" mat-raised-button color="primary" (click)="search()">{{ "common.search" | translate
+          }}</button>
+      <button class="m-r-8" mat-raised-button color="warn" (click)="reset()">{{ "common.reset" | translate }}</button>
+  </form>
+</div>
+
+<mat-card>
+  <div fxLayout="row wrap">
+    <div fxFlex="100">
+      <section>
+        <!-- beginOrEndRoute -->
+        <button mat-raised-button color="primary" style="float: left;" class="m-r-8" (click)="beginOrEndRoute()">{{
+          "common.create-new" | translate }}</button>
+      </section>
+      <section style="float: right;">
+        <mat-paginator #paginator [showFirstLastButtons]="true" [pageSizeOptions]="pageSizeOptions" [length]="total"
+          [pageSize]="query.size" [pageIndex]="query.page" (page)="pageChanged($event)">
+        </mat-paginator>
+      </section>
+      <section style="float: right; margin-top: 17px;">
+        <mat-label style="color: brown;" class="m-r-8">Sắp xếp theo</mat-label>
+        <mat-select [(ngModel)]="query.sortBy" (selectionChange)="getList()" style="width: fit-content;"
+          name="query.sortBy">
+          <mat-option value="createdOn">Ngày tạo</mat-option>
+          <mat-option value="numberOfKm">Số km</mat-option>
+        </mat-select>
+        <mat-select [(ngModel)]="query.ascDirection" (selectionChange)="getList()" style="width: fit-content;"
+          name="query.ascDirection">
+          <mat-option value="0">Giảm dần</mat-option>
+          <mat-option value="1">Tăng dần</mat-option>
+        </mat-select>
+      </section>
+    </div>
+  </div>
+
+</mat-card>
+
+<mtx-grid [data]="list" [columns]="columns" [cellTemplate]="{ 'numberOfKm': numberOfKmTpl }" [loading]="isLoading" [columnResizable]="columnResizable"
+  [multiSelectable]="multiSelectable" [rowSelectable]="rowSelectable"
+  [hideRowSelectionCheckbox]="hideRowSelectionCheckbox" [rowHover]="rowHover" [rowStriped]="rowStriped"
+  [columnHideable]="columnHideable" [expandable]="expandable" [pageOnFront]="pageOnFront"
+  [showPaginator]="showPaginator" [pageSizeOptions]="pageSizeOptions" [pageIndex]="query.page" [pageSize]="query.size"
+  [length]="total" (page)="pageChanged($event)" (sortChange)="changeSort($event)"
+  (selectionChange)="changeSelect($event)">
+</mtx-grid>
+
+<ng-template #numberOfKmTpl let-row let-index="index" let-col="colDef">
+  {{row.numberOfKm | number:'1.0-3':'currentLocale'}}
+</ng-template>

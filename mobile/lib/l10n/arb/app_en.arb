@@ -1,0 +1,13 @@
+{
+  "@@locale": "en",
+  "sign_in": "Đăng Nhập",
+  "password_hint": "Mật khẩu",
+  "username_hint": "Tên đăng nhập",
+  "florist_title": "Đơn hàng",
+  "log_out":"Đăng xuất",
+  "detail":"Chi tiết đơn hàng",
+  "empty_order":"Chưa có đơn hàng nào",
+  "account_management_page":"Quản lý tài khoản",
+  "sdt":"Số điện thoại",
+  "role":"Vai trò"
+}

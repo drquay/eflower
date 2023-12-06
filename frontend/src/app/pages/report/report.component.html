@@ -1,0 +1,48 @@
+<!-- <page-header class="bg-green-600"></page-header> -->
+<div class="page-header">
+    <form [formGroup]="searchForm">
+        <!-- accountId -->
+        <mat-form-field class="m-r-8">
+            <mat-label>Nhân viên</mat-label>
+            <input matInput formControlName="accountName" placeholder="Nhân viên"
+                [matAutocomplete]="autocompleteAccountId" (ngModelChange)="accountFilter()"
+                (focusout)="accountFocusOut()">
+            <mat-autocomplete #autocompleteAccountId="matAutocomplete"
+                (optionSelected)="setAccountDto($event.option.value)">
+                <mat-option *ngFor="let accountDto of lstAccountDtoFiltered" [value]="accountDto.fullName">
+                    {{accountDto.fullName}}
+                </mat-option>
+            </mat-autocomplete>
+        </mat-form-field>
+        <!-- from -->
+        <mat-form-field class="m-r-8" [style.max-width.px]="180">
+            <input matInput [matDatepicker]="fromPicker" placeholder="Từ ngày" formControlName="from" [min]="minDate"
+                [max]="maxDate">
+            <mat-datepicker-toggle matSuffix [for]="fromPicker"></mat-datepicker-toggle>
+            <mat-datepicker #fromPicker></mat-datepicker>
+            <mat-error *ngIf="searchForm.get('from')?.invalid">
+                {{'validations.required' | translate}}
+            </mat-error>
+        </mat-form-field>
+        <!-- to -->
+        <mat-form-field class="m-r-8" [style.max-width.px]="180">
+            <input matInput [matDatepicker]="toPicker" placeholder="Đến ngày" formControlName="to" [min]="minDate"
+                [max]="maxDate">
+            <mat-datepicker-toggle matSuffix [for]="toPicker"></mat-datepicker-toggle>
+            <mat-datepicker #toPicker></mat-datepicker>
+            <mat-error *ngIf="searchForm.get('to')?.invalid">
+                {{'validations.required' | translate}}
+            </mat-error>
+        </mat-form-field>
+
+        <button class="m-r-8" mat-raised-button color="primary" (click)="search()">{{ "common.search" | translate
+            }}</button>
+        <button class="m-r-8" mat-raised-button color="warn" (click)="reset()">{{ "common.reset" | translate }}</button>
+    </form>
+</div>
+
+<div style="display: block;">
+    <canvas baseChart [datasets]="barChartData" [labels]="barChartLabels" [options]="barChartOptions"
+        [plugins]="barChartPlugins" [legend]="barChartLegend" [type]="barChartType">
+    </canvas>
+</div>

@@ -1,0 +1,54 @@
+<div fxLayout="row wrap" class="matero-row">
+  <div fxFlex="100" class="matero-col">
+    <button mat-raised-button class="m-t-8" color="primary" cdkFocusInitial (click)="save()">{{ 'common.save' |
+      translate }}</button>
+    <button mat-raised-button class="m-t-8 button-close" (click)="onClose()">{{ 'common.close' | translate }}</button>
+  </div>
+</div>
+<div fxLayout="row wrap" class="matero-row">
+  <div fxFlex="100" class="matero-col">
+    <mat-card>
+      <mat-card-title *ngIf="!editMode">Tạo mới</mat-card-title>
+      <mat-card-title *ngIf="editMode">Chỉnh sửa</mat-card-title>
+
+
+      <form [formGroup]="reactiveForm">
+        <div fxLayout="row" fxLayoutAlign="space-between">
+            <div fxLayout="column" fxFlex="0 0 47%">
+              <!-- fullName -->
+              <mat-form-field class="m-r-8">
+                <mat-label>{{ 'pages.customer.edit.fullName' | translate }}</mat-label>
+                <input matInput placeholder="Họ tên" formControlName="fullName" required>
+                <mat-error *ngIf="reactiveForm.get('fullName')?.invalid">
+                  {{'validations.required' | translate}}
+                </mat-error>
+              </mat-form-field>
+            </div>
+            <div fxLayout="column" fxFlex="0 0 47%">
+              <!-- phoneNumber -->
+              <mat-form-field class="m-r-8">
+                <mat-label>{{ 'pages.customer.edit.phoneNumber' | translate }}</mat-label>
+                <input matInput placeholder="Số điện thoại" formControlName="phoneNumber" required>
+                <mat-error *ngIf="reactiveForm.get('phoneNumber')?.invalid">
+                  {{'validations.required' | translate}}
+                </mat-error>
+              </mat-form-field>
+            </div>
+        </div>
+        <div fxLayout="row" fxLayoutAlign="space-between">
+          <div fxLayout="column" fxFlex="0 0 100%">
+            <!-- address -->
+            <mat-form-field class="m-r-8">
+              <mat-label>{{ 'pages.customer.edit.address' | translate }}</mat-label>
+              <textarea matInput placeholder="Địa chỉ" formControlName="address" required></textarea>
+              <mat-error *ngIf="reactiveForm.get('address')?.invalid">
+                {{'validations.required' | translate}}
+              </mat-error>
+            </mat-form-field>
+          </div>
+        </div>
+      </form>
+
+    </mat-card>
+  </div>
+</div>

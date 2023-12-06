@@ -1,0 +1,10 @@
+package com.eflower.common.model.db;
+
+public enum NotificationMessageId {
+    SHIPPER_STOPPING_NOTIFICATION,
+    SHIPPER_SHUTDOWN_APP_NOTIFICATION,
+    FLORIST_RECEIVED_ORDER_NOTIFICATION,
+    ORDER_WILL_BE_EXPIRED_NEXT_1_HOUR,
+    ORDER_RE_ASSIGNMENT,
+    OTHER
+}

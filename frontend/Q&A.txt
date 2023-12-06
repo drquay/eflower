@@ -1,0 +1,55 @@
+[Title]:
+- Nơi đặt -> Nơi nhận.
+
+[Status flow]
+- Đơn mới -> Đang làm -> Làm xong -> Khách duyệt -> Đang giao -> Đã giao -> [Chưa thu tiền, Đã thu tiền] -> Đã hoàn tất.
+- Gặp sự cố (xãy ra sau tiến trình 'Đang giao').
+
+[Florist]:
+- Show bao nhiêu status trên menu. Ex: Error.
+- Chuyển button update status lên trên.
+
+[Shipper]:
+- Đổi title staus 'DONE'. 'Làm xong' thành 'Đang chờ giao'.
+
+[Khách hàng]
+- Nhập số đt trước.
+
+- Florist xem tất cả đơn mới.
+
+- Partner (florist + shipper): là nhân viên trong hệ thống nhưng chỉ nhận và xử lý các đơn hàng ở tỉnh.
+
+- Thợ tự lấy đơn hàng mới. Sale k cần phải giao cho thợ.
+
+Filter: Số đt người đặt, số đt người nhận, mã đơn hàng, trạng thái.
+
+- Quản lý sản phẩm:
++ Mã sp (tự động tạo mã nếu chưa có)
++ Tên sp
++ Hình ảnh
++ Url tham khảo
+
+[Tạo hóa đơn]
+- Tiền đặt cọc: tiền mặt hoặc chuyển khoản. Tiền mặt thì ai giữ.
+- Thông báo trước khi giao cho những người có liên quan.
+- Nén ảnh theo size 500 x 500
+- Quản lý tiền mặt theo từng đơn hàng (quản lý theo khoản thu và chi-chưa cần liền). Chuyển tiền qua lại có xác nhận. Chuyển khoản thì k cần quản lý.
+- Tự động tạo khách hàng và sản phẩm nếu k tìm thấy. Show confirm nhập thêm thông tin.
+- Florist k được xem chi tiết để tránh chọn đơn dễ.
+
+[Quản lý comment]
+- Có attachment (hình).
+
+[Report]
+- Thống kê giá đơn hàng theo từng nhân viên theo khoảng ngày.
+- Thống kê doanh thu của shop theo khoảng ngày.
+
+[Role]
+- Thêm role 'điều phối' đơn hàng cho shipper và comment trên đơn hàng.
+- Thêm role quản lý đơn ở tỉnh.
+
+[Web]
+- Admin, Sale, Điều phối, Quản lý đơn ở tỉnh.
+
+[App]
+- Florist, Shipper.

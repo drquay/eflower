@@ -1,0 +1,21 @@
+<!-- <mat-tab-group>
+  <mat-tab label="Today"> Content 1 </mat-tab>
+  <mat-tab label="Notifications"> Content 2 </mat-tab>
+</mat-tab-group> -->
+
+<ul class="messages">
+  <li *ngFor="let message of messages">
+    <button [class.selected]="message === selectedMessage" type="button" (click)="onSelect(message)">
+      <span class="badge">{{message.message}}</span>
+    </button>
+  </li>
+</ul>
+
+<!-- <div *ngIf="selectedMessage">
+  <h2>{{selectedMessage.name | uppercase}} Details</h2>
+  <div>id: {{selectedMessage.message}}</div>
+  <div>
+    <label for="message-name">Message: </label>
+    <input id="message-name" [(ngModel)]="selectedMessage.message" placeholder="message">
+  </div>
+</div> -->

@@ -1,0 +1,24 @@
+Địa chỉ:
++ địa chỉ
++ longitude
++ latitude
+
+Khách hàng:
++ họ và tên
++ số điện thoại
++ địa chỉ *
+- thêm khách hàng
+- chỉnh sửa thông tin khách hàng
+- tìm khách hàng theo tên hoặc số điện thoại
+
+Đơn hàng:
++ giá bán
++ tiền cọc / trả trước
++ người nhận (khách hàng)
++ thông điệp
++ thời gian giao hàng (datetime)
++ ghi chú
+- tạo đơn hàng
+- cập nhập thông tin / tình trạng đơn hàng
+- sắp xếp đơn theo thời gian giao hàng
+- tìm kiếm đơn hàng theo tình trạng đơn ()

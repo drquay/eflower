@@ -1,0 +1,61 @@
+<page-header class="bg-green-600"></page-header>
+
+<form>
+  <mat-form-field class="m-r-8">
+    <input matInput [(ngModel)]="query.search" name="search" placeholder="{{ 'common.search' | translate }}">
+  </mat-form-field>
+
+  <mat-form-field class="m-r-8">
+    <mat-select [(ngModel)]="query.by" name="by" placeholder="Tìm theo">
+      <mat-option>-- Chọn --</mat-option>
+      <mat-option value="name">Họ tên</mat-option>
+      <mat-option value="phone">Số điện thoại</mat-option>
+      <mat-option value="address">Địa chỉ</mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <button class="m-r-8" mat-raised-button color="primary" (click)="search()">{{ "common.search" | translate }}</button>
+  <button class="m-r-8" mat-raised-button color="warn" (click)="reset()">{{ "common.reset" | translate }}</button>
+</form>
+
+<mat-card>
+  <div fxLayout="row wrap">
+    <div fxFlex="100">
+      <section>
+        <!-- Create new -->
+        <button mat-raised-button color="primary" style="float: left;" class="m-r-8" (click)="edit({})">{{
+          "common.create-new" | translate }}</button>
+      </section>
+      <section style="float: right;">
+        <mat-paginator #paginator [showFirstLastButtons]="true" [pageSizeOptions]="pageSizeOptions" [length]="total"
+          [pageSize]="query.size" [pageIndex]="query.page" (page)="pageChanged($event)">
+        </mat-paginator>
+      </section>
+      <section style="float: right; margin-top: 17px;">
+        <mat-label style="color: brown;" class="m-r-8">Sắp xếp theo</mat-label>
+        <mat-select [(ngModel)]="query.sortBy" (selectionChange)="getList()" style="width: fit-content;"
+          name="query.sortBy">
+          <mat-option value="createdOn">Ngày tạo</mat-option>
+          <mat-option value="name">Họ tên</mat-option>
+          <mat-option value="phone">Số điện thoại</mat-option>
+          <mat-option value="address">Địa chỉ</mat-option>
+        </mat-select>
+        <mat-select [(ngModel)]="query.ascDirection" (selectionChange)="getList()" style="width: fit-content;"
+          name="query.ascDirection">
+          <mat-option value="0">Giảm dần</mat-option>
+          <mat-option value="1">Tăng dần</mat-option>
+        </mat-select>
+      </section>
+    </div>
+  </div>
+
+</mat-card>
+
+<mtx-grid [data]="list" [columns]="columns" [loading]="isLoading" [columnResizable]="columnResizable"
+  [multiSelectable]="multiSelectable" [rowSelectable]="rowSelectable"
+  [hideRowSelectionCheckbox]="hideRowSelectionCheckbox" [rowHover]="rowHover" [rowStriped]="rowStriped"
+  [columnHideable]="columnHideable" [expandable]="expandable" [pageOnFront]="pageOnFront"
+  [showPaginator]="showPaginator" [pageSizeOptions]="pageSizeOptions" [pageIndex]="query.page" [pageSize]="query.size"
+  [length]="total" (page)="pageChanged($event)" (sortChange)="changeSort($event)"
+  (selectionChange)="changeSelect($event)">
+</mtx-grid>

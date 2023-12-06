@@ -1,0 +1,98 @@
+<!-- <page-header class="bg-green-600"></page-header> -->
+<div class="page-header">
+  <form [formGroup]="searchForm">
+    <!-- code -->
+    <mat-form-field class="m-r-8 search-text">
+      <mat-icon matPrefix class="m-r-4">receipt</mat-icon>
+      <input matInput formControlName="code" placeholder="Mã đơn hàng">
+    </mat-form-field>
+    <!-- status -->
+    <mat-form-field class="m-r-8 search-select">
+      <mat-icon matPrefix class="m-r-4">schedule</mat-icon>
+      <mat-select formControlName="status" (selectionChange)="statusChanged($event)">
+        <mat-option [value]="''">Trạng thái đơn hàng</mat-option>
+        <mat-option *ngFor="let status of lstOrderStatusDto" [value]="status.value">
+          {{ status.name }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+    <!-- buyerPhoneNumber -->
+    <mat-form-field class="m-r-8 search-phone">
+      <mat-icon matPrefix class="m-r-4">contact_phone</mat-icon>
+      <input matInput formControlName="buyerPhoneNumber" placeholder="Số đt khách">
+    </mat-form-field>
+    <!-- receiverPhoneNumber -->
+    <mat-form-field class="m-r-8 search-phone">
+      <mat-icon matPrefix class="m-r-4">dialer_sip</mat-icon>
+      <input matInput formControlName="receiverPhoneNumber" placeholder="Số đt nhận">
+    </mat-form-field>
+
+    <button class="m-r-8" mat-raised-button color="primary" (click)="search()">{{ "common.search" | translate
+      }}</button>
+    <button class="m-r-8" mat-raised-button color="warn" (click)="reset()">Nhập lại</button>
+  </form>
+</div>
+
+<mat-card>
+  <!-- fxLayoutAlign="center" -->
+  <mat-tab-group dynamicHeight [(selectedIndex)]="selectedTabIndex" (selectedTabChange)="tabChanged($event)">
+    <mat-tab class="m-r-8" *ngFor="let tab of tabs" [disabled]="tab.disabled">
+      <ng-template mat-tab-label>
+        <span [matBadge]="getStatusNumber(tab.value)" matBadgePosition="after" matBadgeOverlap="false"
+          matBadgeColor="accent">{{tab.label}}</span>
+      </ng-template>
+    </mat-tab>
+  </mat-tab-group>
+</mat-card>
+
+<mat-card>
+  <div fxLayout="row wrap">
+    <div fxFlex="100">
+      <section *ngIf="isCreateNew">
+        <!-- Create new -->
+        <button mat-raised-button color="primary" style="float: left;" class="m-r-8" (click)="edit({})">{{
+          "common.create-new" | translate }}</button>
+      </section>
+      <section style="float: right;">
+        <mat-paginator [showFirstLastButtons]="true" [pageSizeOptions]="pageSizeOptions" [length]="total"
+          [pageSize]="query.size" [pageIndex]="query.page" (page)="pageChanged($event)">
+        </mat-paginator>
+      </section>
+      <section style="float: right; margin-top: 17px;">
+        <mat-label style="color: brown;" class="m-r-8">Sắp xếp theo</mat-label>
+        <mat-select [(ngModel)]="query.sortBy" (selectionChange)="getList()" style="width: fit-content;"
+          name="query.sortBy">
+          <mat-option value="createdOn">Ngày tạo</mat-option>
+          <mat-option value="status">Trạng thái</mat-option>
+          <mat-option value="code">Mã đơn hàng</mat-option>
+          <mat-option value="price">Giá đơn</mat-option>
+          <mat-option value="deliveryDateTime">Ngày giao</mat-option>
+          <mat-option value="source">Nơi đặt</mat-option>
+        </mat-select>
+        <mat-select [(ngModel)]="query.ascDirection" (selectionChange)="getList()" style="width: fit-content;"
+          name="query.ascDirection">
+          <mat-option value="0">Giảm dần</mat-option>
+          <mat-option value="1">Tăng dần</mat-option>
+        </mat-select>
+      </section>
+    </div>
+  </div>
+
+</mat-card>
+
+<mtx-grid [data]="list" [columns]="columns" [cellTemplate]="{ 'price': priceTpl, 'deposit.amount': depositTpl }"
+  [loading]="isLoading" [columnResizable]="columnResizable" [multiSelectable]="multiSelectable"
+  [rowSelectable]="rowSelectable" [hideRowSelectionCheckbox]="hideRowSelectionCheckbox" [rowHover]="rowHover"
+  [rowStriped]="rowStriped" [columnHideable]="columnHideable" [expandable]="expandable" [pageOnFront]="pageOnFront"
+  [showPaginator]="showPaginator" [pageSizeOptions]="pageSizeOptions" [pageIndex]="query.page" [pageSize]="query.size"
+  [length]="total" (page)="pageChanged($event)" (sortChange)="changeSort($event)"
+  (selectionChange)="changeSelect($event)">
+</mtx-grid>
+
+<ng-template #priceTpl let-row let-index="index" let-col="colDef">
+  {{row.price | number:'1.0-3':'currentLocale'}}
+</ng-template>
+
+<ng-template #depositTpl let-row let-index="index" let-col="colDef">
+  {{row.deposit.amount | number:'1.0-3':'currentLocale'}}
+</ng-template>

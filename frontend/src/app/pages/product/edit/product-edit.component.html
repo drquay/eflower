@@ -1,0 +1,92 @@
+<div fxLayout="row wrap" class="matero-row">
+  <div fxFlex="100" class="matero-col">
+    <button mat-raised-button class="m-r-8" color="primary" cdkFocusInitial (click)="save()">{{ 'common.save' |
+      translate }}</button>
+    <button mat-raised-button class="m-r-8" color="primary" (click)="chooseFiles.click()">Thêm ảnh</button>
+    <input hidden type="file" #chooseFiles id="chooseFiles" onclick="value = null" (change)="onChooseFiles($event)" name="chooseFiles"
+      multiple="multiple" accept="image/*" />
+    <button mat-raised-button class="m-r-8 button-close" (click)="onClose()">{{ 'common.close' | translate }}</button>
+  </div>
+</div>
+<div fxLayout="row wrap" class="matero-row">
+  <div fxFlex="100" class="matero-col">
+    <mat-card>
+      <mat-card-title *ngIf="!editMode">Tạo mới</mat-card-title>
+      <mat-card-title *ngIf="editMode">Chỉnh sửa</mat-card-title>
+
+      <form [formGroup]="reactiveForm">
+        <div fxLayout="row" fxLayoutAlign="space-between">
+          <div fxLayout="column" fxFlex="0 0 47%">
+            <!-- code -->
+            <mat-form-field class="m-r-8">
+              <mat-label>Mã sản phẩm</mat-label>
+              <input matInput placeholder="Mã sản phẩm" formControlName="code" required>
+              <mat-error *ngIf="reactiveForm.get('code')?.invalid">
+                {{'validations.required' | translate}}
+              </mat-error>
+            </mat-form-field>
+          </div>
+          <div fxLayout="column" fxFlex="0 0 47%">
+            <!-- name -->
+            <mat-form-field class="m-r-8">
+              <mat-label>Tên sản phẩm</mat-label>
+              <input matInput placeholder="Tên sản phẩm" formControlName="name" required>
+              <mat-error *ngIf="reactiveForm.get('name')?.invalid">
+                {{'validations.required' | translate}}
+              </mat-error>
+            </mat-form-field>
+          </div>
+        </div>
+        <div fxLayout="row" fxLayoutAlign="space-between">
+          <div fxLayout="column" fxFlex="0 0 47%">
+            <!-- price -->
+            <mat-form-field class="m-r-8" [style.max-width.px]="150">
+              <mat-label>Giá tiền</mat-label>
+              <input matInput placeholder="Giá tiền" formControlName="price" required (focus)="onFocusNumber($event)"
+                (blur)="onBlurNumber($event)">
+              <mat-error *ngIf="reactiveForm.get('price')?.invalid">
+                {{'validations.required' | translate}}
+              </mat-error>
+            </mat-form-field>
+          </div>
+          <div fxLayout="column" fxFlex="0 0 47%">
+            <!-- description -->
+            <mat-form-field class="m-r-8">
+              <mat-label>Mô tả sản phẩm</mat-label>
+              <textarea matInput placeholder="Mô tả sản phẩm" formControlName="description"></textarea>
+            </mat-form-field>
+          </div>
+        </div>
+        <div fxLayout="row" fxLayoutAlign="space-between">
+          <div fxLayout="column" fxFlex="0 0 100%">
+            <!-- referenceUrl -->
+            <mat-form-field class="m-r-8">
+              <mat-label>Đường dẫn tham khảo</mat-label>
+              <input matInput placeholder="Đường dẫn tham khảo" formControlName="referenceUrl">
+            </mat-form-field>
+          </div>
+        </div>
+        <div fxLayout="row" fxLayoutAlign="space-between">
+          <div fxLayout="column" fxFlex="0 0 100%">
+            <!-- images -->
+            <mat-grid-list cols="4" rowHeight="1:1">
+              <mat-grid-tile *ngFor="let attachment of attachments; let i = index;">
+                <mat-grid-tile-header>
+                  <span matLine>{{ i + 1 }} - {{ attachment.name }}</span>
+                  <span matLine>({{ attachment.uploadedBy?.fullName }})</span>
+                  <button class="button-image-delete" color="warn" (click)="deleteImage(attachment)">
+                    <mat-icon class="material-icons">delete</mat-icon>
+                  </button>
+                </mat-grid-tile-header>
+
+                <img class="w-full h-full object-cover cursor-pointer" [src]="attachment.url"
+                  alt="{{ i + 1 }} - {{ attachment.name }}" (click)="previewImage(i)" />
+              </mat-grid-tile>
+            </mat-grid-list>
+          </div>
+        </div>
+      </form>
+
+    </mat-card>
+  </div>
+</div>

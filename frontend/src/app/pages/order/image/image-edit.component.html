@@ -1,0 +1,37 @@
+<div fxLayout="row wrap" class="matero-row">
+  <div fxFlex="100" class="matero-col">
+    <button mat-raised-button color="primary" cdkFocusInitial (click)="chooseFiles.click()">Thêm ảnh</button>
+    <input hidden type="file" #chooseFiles id="chooseFiles" onclick="value = null" (change)="onChooseFiles($event)" name="chooseFiles"
+      multiple="multiple" accept="image/*" />
+    <button mat-raised-button class="m-t-8 button-close" (click)="onClose()">{{ 'common.close' | translate }}</button>
+  </div>
+</div>
+<div fxLayout="row wrap" class="matero-row">
+  <div fxFlex="100" class="matero-col">
+    <mat-card class="mat-card">
+      <!-- create-new -->
+      <mat-card-title>Hình ảnh</mat-card-title>
+      <mat-card-content>
+        <div fxLayout="row" fxLayoutAlign="space-between">
+          <div fxLayout="column" fxFlex="0 0 100%">
+            <!-- images -->
+            <mat-grid-list cols="4" rowHeight="1:1">
+              <mat-grid-tile *ngFor="let attachment of attachments; let i = index;">
+                <mat-grid-tile-header>
+                  <span matLine>{{ i + 1 }} - {{ attachment.name }}</span>
+                  <span matLine>({{ attachment.uploadedBy?.fullName }})</span>
+                  <button class="button-image-delete" color="warn" (click)="deleteImage(attachment)">
+                    <mat-icon class="material-icons">delete</mat-icon>
+                  </button>
+                </mat-grid-tile-header>
+                <img class="w-full h-full object-cover cursor-pointer" [src]="attachment.url"
+                  alt="{{ i + 1 }} - {{ attachment.name }}" (click)="previewImage(i)" />
+              </mat-grid-tile>
+            </mat-grid-list>
+          </div>
+        </div>
+      </mat-card-content>
+
+    </mat-card>
+  </div>
+</div>

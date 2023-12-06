@@ -1,0 +1,67 @@
+<div fxLayout="row wrap" class="matero-row">
+  <div fxFlex="100" class="matero-col">
+    <button mat-raised-button class="m-r-8" color="primary" cdkFocusInitial (click)="save()">{{ 'common.save' |
+      translate }}</button>
+    <button mat-raised-button class="m-r-8 button-close" (click)="onClose()">{{ 'common.close' | translate }}</button>
+  </div>
+</div>
+<div fxLayout="row wrap" class="matero-row">
+  <div fxFlex="100" class="matero-col">
+    <mat-card>
+      <mat-card-title>Tạo mới</mat-card-title>
+
+      <form [formGroup]="reactiveForm">
+        <div fxLayout="row" fxLayoutAlign="space-between">
+          <div fxLayout="column" fxFlex="0 0 47%">
+            <!-- toLongitude -->
+            <mat-form-field class="m-r-8">
+              <mat-label>Tọa độ x đến</mat-label>
+              <input matInput placeholder="Tọa độ x đến" formControlName="toLongitude" required>
+              <mat-error *ngIf="reactiveForm.get('toLongitude')?.invalid">
+                {{'validations.required' | translate}}
+              </mat-error>
+            </mat-form-field>
+          </div>
+          <div fxLayout="column" fxFlex="0 0 47%">
+            <!-- toLatitude -->
+            <mat-form-field class="m-r-8">
+              <mat-label>Tọa độ y đến</mat-label>
+              <input matInput placeholder="Tọa độ y đến" formControlName="toLatitude" required>
+              <mat-error *ngIf="reactiveForm.get('toLatitude')?.invalid">
+                {{'validations.required' | translate}}
+              </mat-error>
+            </mat-form-field>
+          </div>
+        </div>
+        <div fxLayout="row" fxLayoutAlign="space-between">
+          <div fxLayout="column" fxFlex="0 0 47%">
+            <!-- routeType -->
+            <mat-form-field class="m-r-8" [style.max-width.px]="150">
+              <mat-label>Loại vị trí</mat-label>
+              <mat-select required formControlName="routeType">
+                <mat-option *ngFor="let routeType of lstRouteTypeDto" [value]="routeType.value">
+                  {{ routeType.name }}
+                </mat-option>
+              </mat-select>
+              <mat-error *ngIf="reactiveForm.get('routeType')?.invalid">
+                {{'validations.required' | translate}}
+              </mat-error>
+            </mat-form-field>
+          </div>
+          <div fxLayout="column" fxFlex="0 0 47%">
+            <!-- numberOfKm -->
+            <mat-form-field class="m-r-8" [style.max-width.px]="150">
+              <mat-label>Số km</mat-label>
+              <input matInput placeholder="Số km" formControlName="numberOfKm" required (focus)="onFocusNumber($event)"
+                (blur)="onBlurNumber($event)">
+              <mat-error *ngIf="reactiveForm.get('numberOfKm')?.invalid">
+                {{'validations.required' | translate}}
+              </mat-error>
+            </mat-form-field>
+          </div>
+        </div>
+      </form>
+
+    </mat-card>
+  </div>
+</div>
